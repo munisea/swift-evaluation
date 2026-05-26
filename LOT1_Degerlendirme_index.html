@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOT 1 — Eğitim Materyali Geliştirme: Değerlendirme Matrisi</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 14px; background: #f5f5f3; color: #1a1a18; line-height: 1.5; }
+
+  .page { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* Header */
+  .doc-header { margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1.5px solid #e0ddd6; }
+  .doc-header h1 { font-size: 20px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; }
+  .doc-header .subtitle { font-size: 13px; color: #6b6b67; }
+  .doc-header .meta { display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap; }
+  .doc-header .meta-item { font-size: 12px; color: #6b6b67; }
+  .doc-header .meta-item strong { color: #1a1a18; }
+
+  /* How-to box */
+  .howto { background: #eef4fb; border: 1px solid #c5d9ef; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+  .howto h2 { font-size: 13px; font-weight: 600; color: #1a4a7a; margin-bottom: 10px; }
+  .howto ol { padding-left: 18px; }
+  .howto ol li { font-size: 12.5px; color: #2a4a6a; margin-bottom: 5px; line-height: 1.5; }
+  .howto ol li strong { color: #1a3a5a; }
+
+  /* Candidate tabs */
+  .section-label { font-size: 11px; font-weight: 600; color: #6b6b67; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tab { border: 1px solid #d0cec8; border-radius: 20px; padding: 6px 16px; font-size: 13px; cursor: pointer; background: #fff; color: #555; transition: all 0.15s; font-family: inherit; }
+  .tab:hover { background: #f0ede8; border-color: #b0ada8; }
+  .tab.active { background: #1a4a7a; color: #fff; border-color: #1a4a7a; font-weight: 500; }
+
+  .active-banner { font-size: 13px; font-weight: 500; color: #1a1a18; margin-bottom: 20px; padding: 10px 14px; background: #fff; border: 1px solid #e0ddd6; border-radius: 8px; }
+  .active-banner span { color: #1a4a7a; }
+
+  /* Criteria table */
+  .matrix-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e0ddd6; margin-bottom: 28px; }
+  .matrix-table thead tr { background: #f0ede8; }
+  .matrix-table th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: #6b6b67; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e0ddd6; white-space: nowrap; }
+  .matrix-table td { padding: 14px 12px; vertical-align: top; border-bottom: 1px solid #f0ede8; }
+  .matrix-table tbody tr:last-child td { border-bottom: none; }
+  .matrix-table tbody tr:hover { background: #faf9f7; }
+
+  .crit-no { font-size: 11px; font-weight: 600; color: #aaa; padding-top: 3px; }
+  .crit-title { font-size: 13.5px; font-weight: 600; color: #1a1a18; margin-bottom: 5px; }
+  .crit-desc { font-size: 12px; color: #555; margin-bottom: 6px; }
+  .crit-bullets { padding-left: 16px; margin: 0; }
+  .crit-bullets li { font-size: 12px; color: #555; margin-bottom: 3px; line-height: 1.5; }
+  .crit-max { font-size: 13px; font-weight: 600; color: #333; white-space: nowrap; padding-top: 2px; }
+
+  .chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .chip { border: 1px solid #d0cec8; border-radius: 5px; padding: 5px 11px; font-size: 12px; font-weight: 500; cursor: pointer; background: #fff; color: #555; transition: all 0.12s; font-family: inherit; white-space: nowrap; }
+  .chip:hover { background: #f0ede8; border-color: #aaa; color: #333; }
+  .chip.sel-zero { background: #fdecea; color: #c0392b; border-color: #e8a09a; }
+  .chip.sel-low  { background: #fef5e7; color: #b7770d; border-color: #f0c96a; }
+  .chip.sel-mid  { background: #eaf3fb; color: #1a5a9a; border-color: #90bfe0; }
+  .chip.sel-high { background: #e8f6ee; color: #1a6a3a; border-color: #80c8a0; }
+  .chip.sel-full { background: #1D9E75; color: #fff; border-color: #0F6E56; }
+
+  .disp-score { font-size: 13px; font-weight: 600; color: #333; white-space: nowrap; padding-top: 2px; }
+
+  /* Summary */
+  .summary-box { background: #fff; border: 1px solid #e0ddd6; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; }
+  .summary-box h2 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: #1a1a18; }
+  .bar-row { margin-bottom: 10px; }
+  .bar-meta { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 4px; }
+  .bar-track { height: 6px; background: #e8e6e0; border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; background: #1a4a7a; transition: width 0.35s; }
+  .grand-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e8e6e0; }
+  .grand-label { font-size: 14px; font-weight: 600; color: #1a1a18; }
+  .grand-sub { font-size: 12px; color: #888; margin-top: 2px; }
+  .grand-value { font-size: 30px; font-weight: 600; color: #1a1a18; }
+
+  /* Rankings */
+  .rankings { background: #fff; border: 1px solid #e0ddd6; border-radius: 10px; overflow: hidden; }
+  .rankings h2 { font-size: 14px; font-weight: 600; padding: 16px 20px 12px; border-bottom: 1px solid #e8e6e0; color: #1a1a18; }
+  .rank-table { width: 100%; border-collapse: collapse; }
+  .rank-table th { padding: 8px 10px; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e8e6e0; text-align: left; background: #faf9f7; }
+  .rank-table th.num { text-align: center; }
+  .rank-table td { padding: 10px 10px; font-size: 13px; border-bottom: 1px solid #f0ede8; vertical-align: middle; }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table td.num { text-align: center; color: #555; }
+  .rank-table td.aday { font-weight: 600; }
+  .rank-table tr:hover td { background: #faf9f7; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .badge-g { background: #e8f6ee; color: #1a6a3a; }
+  .badge-y { background: #fef5e7; color: #b7770d; }
+  .badge-r { background: #fdecea; color: #c0392b; }
+  .badge-n { background: #f0ede8; color: #888; }
+
+  .mini-bar { height: 4px; background: #e8e6e0; border-radius: 2px; margin-top: 4px; overflow: hidden; min-width: 60px; }
+  .mini-fill { height: 100%; background: #1a4a7a; border-radius: 2px; transition: width 0.35s; }
+
+  .total-cell { font-weight: 700; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    .page { padding: 16px; max-width: 100%; }
+    .tab { display: none; }
+    .chip { pointer-events: none; }
+  }
+
+  @media (max-width: 680px) {
+    .matrix-table th:nth-child(4), .matrix-table td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <h1>LOT 1 — Eğitim Materyali Geliştirme: Başvuru Değerlendirme Matrisi</h1>
+    <div class="subtitle">SWIFT Projesi (Grant Contract No.: 2025/484-884) · Famagusta Women Center Association (MAKAMER)</div>
+    <div class="meta">
+      <div class="meta-item"><strong>Toplam puan:</strong> 100</div>
+      <div class="meta-item"><strong>Aday sayısı:</strong> 7</div>
+      <div class="meta-item"><strong>Değerlendirme tarihi:</strong> ___________</div>
+      <div class="meta-item"><strong>Değerlendirici:</strong> ___________</div>
+    </div>
+  </div>
+
+  <div class="howto">
+    <h2>📋 Nasıl kullanılır?</h2>
+    <ol>
+      <li><strong>Üstteki sekmelerde</strong> bir aday seçin — puanlar adaya özel kaydedilir.</li>
+      <li>Her kriterin karşısındaki <strong>puan düğmelerinden birini seçin</strong>. Seçim değiştirebilir, yanlış tıklamada tekrar tıklayarak düzeltin.</li>
+      <li>6 kriter tamamlandığında <strong>toplam puan otomatik hesaplanır</strong> ve aday "Güçlü / Orta / Zayıf" olarak sınıflandırılır.</li>
+      <li>Tüm adaylar puanlandıktan sonra <strong>Karşılaştırma Tablosu</strong> bölümünde sıralı genel görünüme ulaşabilirsiniz.</li>
+      <li>Değerlendirme komitesindeki her üye bu formu <strong>bağımsız olarak</strong> doldurmalı; ardından puanlar karşılaştırılmalıdır. Aynı adayda <strong>5+ puan sapması</strong> olan kriterler tartışmaya açılmalıdır.</li>
+    </ol>
+  </div>
+
+  <div class="section-label">Adaylar</div>
+  <div class="tabs" id="tabs"></div>
+  <div class="active-banner" id="active-banner">👆 Değerlendirmeye başlamak için bir aday seçin</div>
+
+  <table class="matrix-table" id="matrix-table">
+    <thead>
+      <tr>
+        <th style="width:30px">No</th>
+        <th>Değerlendirme Kriteri ve Açıklaması</th>
+        <th style="width:50px">Maks.</th>
+        <th style="width:300px">Puan seçimi</th>
+        <th style="width:60px">Puan</th>
+      </tr>
+    </thead>
+    <tbody id="criteria-body"></tbody>
+  </table>
+
+  <div class="summary-box">
+    <h2 id="summary-title">Puan Özeti</h2>
+    <div id="bars"></div>
+    <div class="grand-row">
+      <div>
+        <div class="grand-label">Toplam puan</div>
+        <div class="grand-sub" id="grand-sub">Lütfen bir aday seçip kriterleri puanlayın</div>
+      </div>
+      <div class="grand-value" id="grand-value">—</div>
+    </div>
+  </div>
+
+  <div class="rankings">
+    <h2>Tüm Adaylar — Karşılaştırma Tablosu</h2>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>Aday</th>
+          <th class="num">K1</th>
+          <th class="num">K2</th>
+          <th class="num">K3</th>
+          <th class="num">K4</th>
+          <th class="num">K5</th>
+          <th class="num">K6</th>
+          <th>Toplam</th>
+          <th>Durum</th>
+        </tr>
+      </thead>
+      <tbody id="rank-body"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const candidates = [
+  { id: 'nazim',   label: 'Nazım' },
+  { id: 'cansu',   label: 'Cansu' },
+  { id: 'cimen',   label: 'Çimen' },
+  { id: 'ozge',    label: 'Özge' },
+  { id: 'berk',    label: 'Berk (Avdeso)' },
+  { id: 'mustafa', label: 'Mustafa (Candela)' },
+  { id: 'gozen',   label: 'Gözen (Master Kids)' },
+];
+
+const criteria = [
+  {
+    id:'K1', no:1, max:25,
+    label:'Eğitim Modülü Geliştirme Deneyimi',
+    desc:'Daha önce bağımsız olarak tam yapılandırılmış, kullanıma hazır bir eğitim modülü ya da müfredat geliştirmiş mi?',
+    bullets:[
+      'Oturum planı, kolaylaştırıcı rehberi ve etkinlik setini bir arada içeren bütünleşik bir çıktı ortaya koymuş mu?',
+      'Geliştirilen modüller gerçek ortamlarda uygulanmış mı?',
+      'Sadece içerik yazarlığı değil, öğretim tasarımı (instructional design) yaklaşımı kanıtlanabilmeli.',
+      'CV ve portföy örnekleri bu deneyimi somut olarak desteklemeli.',
+    ],
+    chips:[{v:0,t:'0 — Yok'},{v:8,t:'8 — Zayıf'},{v:15,t:'15 — Yeterli'},{v:20,t:'20 — İyi'},{v:25,t:'25 — Güçlü'}]
+  },
+  {
+    id:'K2', no:2, max:20,
+    label:'Non-Formal Eğitim ve Ekoliterasi Yetkinliği',
+    desc:'Formal olmayan öğrenme ortamlarına uygun eğitim tasarlama ve uygulama kapasitesi:',
+    bullets:[
+      'Deneyimsel ve katılımcı öğrenme yöntemlerini (sorgulama, keşif, simülasyon) biliyor ve uyguluyor mu?',
+      'Sistemik düşünme ve "Ben ne yapabilirim?" sorusunu merkeze alan ekoliterasi yaklaşımı var mı?',
+      'Bilişsel (bilgi), duyuşsal (tutum) ve psikomotor (davranış) alanlarını dengeli ele alıyor mu?',
+      'Ekoliterasi kavramını yalnızca teorik değil, pratik düzeyde uygulamış mı?',
+    ],
+    chips:[{v:0,t:'0 — Yok'},{v:6,t:'6 — Zayıf'},{v:12,t:'12 — Yeterli'},{v:16,t:'16 — İyi'},{v:20,t:'20 — Güçlü'}]
+  },
+  {
+    id:'K3', no:3, max:20,
+    label:'Çocuklara Yönelik Eğitim İçeriği Hazırlama ve Sunma',
+    desc:'9–14 yaş grubuna uygun materyal üretme ve bu materyali çocuklarla bizzat uygulama deneyimi:',
+    bullets:[
+      'Etkinlik kartı, hikâye anlatımı, görsel infografik, quiz kartı, oyun tabanlı araç gibi çocuk dostu formatlar üretmiş mi?',
+      'İçerikleri sınıf ya da informal ortamda çocuklarla doğrudan uygulamış, sunmuş, kolaylaştırmış mı?',
+      '9–11 ve 12–14 yaş alt grupları arasındaki farklılıkları gözetecek esnekliği var mı?',
+      'Öğretmenlere hazır-kullan materyali bırakma (minimum uyarlama gerektirme) yaklaşımı benimsenmiş mi?',
+    ],
+    chips:[{v:0,t:'0 — Yok'},{v:6,t:'6 — Genel'},{v:12,t:'12 — Yakın yaş'},{v:16,t:'16 — İyi'},{v:20,t:'20 — Hedef yaş'}]
+  },
+  {
+    id:'K4', no:4, max:15,
+    label:'Çevre Eğitimi / Sulak Alanlar / Biyolojik Çeşitlilik Bilgisi',
+    desc:'Konu alanına hâkimiyet — bu bilgi materyalin özgünlüğünü ve bilimsel doğruluğunu belirler:',
+    bullets:[
+      'Sulak alanların ekosistem hizmetlerini (karbon yutağı, biyoçeşitlilik, su döngüsü) açıklayabiliyor mu?',
+      'Ayluga Sulak Alanı gibi yerel/bağlama özgü içerik üretebileceğine dair kanıt var mı?',
+      'Doğal sistemler ile sosyal/kültürel sistemler arasındaki bağlantıları eğitime yansıtabiliyor mu?',
+      'Çevre eğitimi programı, yayın, saha çalışması veya proje deneyimi belgeli mi?',
+    ],
+    chips:[{v:0,t:'0 — Yok'},{v:5,t:'5 — Genel'},{v:9,t:'9 — İlgili'},{v:15,t:'15 — Doğrudan'}]
+  },
+  {
+    id:'K5', no:5, max:10,
+    label:'Ölçme-Değerlendirme ve Öğrenme Çıktıları Tasarımı',
+    desc:'Eğitimin işe yarayıp yaramadığını ölçebilecek araçlar tasarlama kapasitesi:',
+    bullets:[
+      'Öğrenme hedeflerini somut ve ölçülebilir biçimde tanımlayabiliyor mu?',
+      'Quiz kartı, değerlendirme formu, gözlem listesi gibi basit ama işlevsel araçlar geliştirmiş mi?',
+      'Bilişsel, duyuşsal ve davranışsal çıktıları ayrı ölçüyor mu?',
+      'Eğiticinin kolayca uygulayabileceği, karmaşık olmayan değerlendirme yaklaşımı sunuyor mu?',
+    ],
+    chips:[{v:0,t:'0 — Yok'},{v:4,t:'4 — Zayıf'},{v:7,t:'7 — Yeterli'},{v:10,t:'10 — Güçlü'}]
+  },
+  {
+    id:'K6', no:6, max:10,
+    label:'Portfolyo, Referanslar ve Önceki İşlerin Kalitesi',
+    desc:'Belgelenen geçmiş çalışmalar ne kadar güçlü ve bu görevle ne ölçüde örtüşüyor?',
+    bullets:[
+      'Sunulan portföy örnekleri bu görevin kapsamıyla doğrudan örtüşüyor mu?',
+      'Referans listesindeki görevler tamamlanmış ve sonuçları belgelenmiş mi?',
+      'AB fonlu proje veya çevre/sürdürülebilirlik temalı program geçmişi var mı? (artı puan)',
+      'Yalnızca CV iddiası değil, somut çıktı (modül, materyal, rapor örneği) sunulmuş mu?',
+    ],
+    chips:[{v:0,t:'0 — Yok'},{v:4,t:'4 — Zayıf'},{v:7,t:'7 — Yeterli'},{v:10,t:'10 — Güçlü'}]
+  },
+];
+
+const allScores = {};
+candidates.forEach(c => { allScores[c.id] = {}; });
+let activeCand = null;
+
+function chipClass(v, max) {
+  if (v === 0) return 'sel-zero';
+  const p = v / max;
+  if (p <= 0.38) return 'sel-low';
+  if (p <= 0.68) return 'sel-mid';
+  if (p < 1)    return 'sel-high';
+  return 'sel-full';
+}
+
+// Build tabs
+const tabsEl = document.getElementById('tabs');
+candidates.forEach(c => {
+  const btn = document.createElement('button');
+  btn.className = 'tab';
+  btn.textContent = c.label;
+  btn.dataset.id = c.id;
+  btn.onclick = () => selectCandidate(c.id);
+  tabsEl.appendChild(btn);
+});
+
+// Build criteria rows + bars
+const tbody = document.getElementById('criteria-body');
+const barsEl = document.getElementById('bars');
+
+criteria.forEach(cr => {
+  const tr = document.createElement('tr');
+  const bullets = cr.bullets.map(b => `<li>${b}</li>`).join('');
+  const chips = cr.chips.map(ch => `<button class="chip" data-val="${ch.v}" data-crit="${cr.id}" data-max="${cr.max}">${ch.t}</button>`).join('');
+  tr.innerHTML = `
+    <td class="crit-no">${cr.no}</td>
+    <td>
+      <div class="crit-title">${cr.label}</div>
+      <div class="crit-desc">${cr.desc}</div>
+      <ul class="crit-bullets">${bullets}</ul>
+    </td>
+    <td class="crit-max">${cr.max}</td>
+    <td><div class="chips" id="chips-${cr.id}">${chips}</div></td>
+    <td class="disp-score" id="disp-${cr.id}">—</td>`;
+  tbody.appendChild(tr);
+
+  const shortLabel = cr.label.length > 44 ? cr.label.slice(0,44)+'…' : cr.label;
+  const barDiv = document.createElement('div');
+  barDiv.className = 'bar-row';
+  barDiv.innerHTML = `
+    <div class="bar-meta"><span>${cr.no}. ${shortLabel}</span><span id="barlbl-${cr.id}">— / ${cr.max}</span></div>
+    <div class="bar-track"><div class="bar-fill" id="bar-${cr.id}" style="width:0%"></div></div>`;
+  barsEl.appendChild(barDiv);
+});
+
+// Chip click handler (delegated)
+document.getElementById('matrix-table').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip || !activeCand) return;
+  const critId = chip.dataset.crit;
+  const max = parseInt(chip.dataset.max);
+  const val = parseInt(chip.dataset.val);
+  document.querySelectorAll(`#chips-${critId} .chip`).forEach(c => {
+    c.classList.remove('sel-zero','sel-low','sel-mid','sel-high','sel-full');
+  });
+  chip.classList.add(chipClass(val, max));
+  allScores[activeCand][critId] = val;
+  document.getElementById('disp-'+critId).textContent = val + ' / ' + max;
+  updateSummary();
+  updateRankTable();
+});
+
+function selectCandidate(id) {
+  activeCand = id;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.id === id));
+  const cand = candidates.find(c => c.id === id);
+  document.getElementById('active-banner').innerHTML = `✏️ &nbsp;Şu an puanlanan: <span>${cand.label}</span>`;
+  document.getElementById('summary-title').textContent = cand.label + ' — Puan Özeti';
+
+  criteria.forEach(cr => {
+    document.querySelectorAll(`#chips-${cr.id} .chip`).forEach(c => {
+      c.classList.remove('sel-zero','sel-low','sel-mid','sel-high','sel-full');
+    });
+    const saved = allScores[id][cr.id];
+    if (saved !== undefined) {
+      const chip = document.querySelector(`#chips-${cr.id} .chip[data-val="${saved}"]`);
+      if (chip) chip.classList.add(chipClass(saved, cr.max));
+      document.getElementById('disp-'+cr.id).textContent = saved + ' / ' + cr.max;
+    } else {
+      document.getElementById('disp-'+cr.id).textContent = '—';
+    }
+  });
+  updateSummary();
+}
+
+function updateSummary() {
+  if (!activeCand) return;
+  const sc = allScores[activeCand];
+  let total = 0, filled = 0;
+  criteria.forEach(cr => {
+    const v = sc[cr.id];
+    if (v !== undefined) {
+      total += v; filled++;
+      document.getElementById('barlbl-'+cr.id).textContent = v + ' / ' + cr.max;
+      document.getElementById('bar-'+cr.id).style.width = (v/cr.max*100)+'%';
+    } else {
+      document.getElementById('barlbl-'+cr.id).textContent = '— / ' + cr.max;
+      document.getElementById('bar-'+cr.id).style.width = '0%';
+    }
+  });
+  document.getElementById('grand-value').textContent = filled > 0 ? total + (filled===6?' / 100':' puan') : '—';
+  if (filled === 6) {
+    const d = total>=80 ? '🟢 Güçlü aday — sözleşme için önerilir'
+            : total>=60 ? '🟡 Değerlendirilebilir aday'
+            : '🔴 Zayıf aday — önerilmez';
+    document.getElementById('grand-sub').textContent = d;
+  } else {
+    document.getElementById('grand-sub').textContent = (6-filled) + ' kriter daha seçilmedi';
+  }
+}
+
+function updateRankTable() {
+  const tbody = document.getElementById('rank-body');
+  tbody.innerHTML = '';
+  const rows = candidates.map(c => {
+    const sc = allScores[c.id];
+    let total = 0, filled = 0;
+    criteria.forEach(cr => { if (sc[cr.id]!==undefined){total+=sc[cr.id];filled++;} });
+    return {...c, total, filled, sc};
+  }).sort((a,b) => b.total - a.total);
+
+  rows.forEach((r, i) => {
+    const complete = r.filled === 6;
+    const badge = !complete
+      ? `<span class="badge badge-n">Eksik</span>`
+      : r.total>=80 ? `<span class="badge badge-g">Güçlü</span>`
+      : r.total>=60 ? `<span class="badge badge-y">Orta</span>`
+      : `<span class="badge badge-r">Zayıf</span>`;
+    const kCells = criteria.map(cr => {
+      const v = r.sc[cr.id];
+      return `<td class="num">${v!==undefined ? v : '<span style="color:#ccc">—</span>'}</td>`;
+    }).join('');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="aday">${complete?(i+1)+'. ':''}${r.label}</td>
+      ${kCells}
+      <td class="total-cell">
+        ${r.total>0?r.total:'—'}
+        ${complete?`<div class="mini-bar"><div class="mini-fill" style="width:${r.total}%"></div></div>`:''}
+      </td>
+      <td>${badge}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+updateRankTable();
+</script>
+</body>
+</html>
