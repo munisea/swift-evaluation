@@ -162,6 +162,23 @@
       <div class="grand-value" id="grand-value">—</div>
     </div>
   </div>
+ <div style="margin: 20px 0; text-align: center;">
+  <input 
+    type="text" 
+    id="evaluator-name" 
+    placeholder="Değerlendirici adınızı yazınız"
+    style="padding:10px; width:260px; margin-right:10px;"
+  >
+
+  <button 
+    onclick="submitEvaluation()" 
+    style="padding:10px 20px; cursor:pointer;"
+  >
+    Değerlendirmeyi Gönder
+  </button>
+
+  <div id="submit-message" style="margin-top:10px; font-weight:600;"></div>
+</div>
 
   <div class="rankings">
     <h2>Tüm Adaylar — Karşılaştırma Tablosu</h2>
@@ -425,6 +442,71 @@ function updateRankTable() {
 }
 
 updateRankTable();
+ async function submitEvaluation() {
+  if (!activeCand) {
+    alert("Lütfen önce bir aday seçin.");
+    return;
+  }
+
+  const evaluatorName = document.getElementById("evaluator-name").value.trim();
+
+  if (!evaluatorName) {
+    alert("Lütfen değerlendirici adınızı yazın.");
+    return;
+  }
+
+  const candidate = candidates.find(c => c.id === activeCand);
+  const sc = allScores[activeCand];
+
+  let total = 0;
+  let filled = 0;
+
+  criteria.forEach(cr => {
+    if (sc[cr.id] !== undefined) {
+      total += sc[cr.id];
+      filled++;
+    }
+  });
+
+  if (filled < criteria.length) {
+    alert("Lütfen tüm kriterleri puanlayın.");
+    return;
+  }
+
+  const durum = total >= 70 ? "Teknik eşiği geçti" : "Teknik eşiği geçemedi";
+
+  const payload = {
+    degerlendirici: evaluatorName,
+    aday: candidate.label,
+    K1: sc.K1 || 0,
+    K2: sc.K2 || 0,
+    K3: sc.K3 || 0,
+    K4: sc.K4 || 0,
+    K5: sc.K5 || 0,
+    K6: sc.K6 || 0,
+    toplam: total,
+    durum: durum
+  };
+
+  const messageBox = document.getElementById("submit-message");
+  messageBox.textContent = "Gönderiliyor...";
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    messageBox.textContent = "Değerlendirme başarıyla gönderildi.";
+  } catch (error) {
+    messageBox.textContent = "Gönderim sırasında hata oluştu.";
+  }
+}
 </script>
 </body>
 </html>
+https://script.google.com/macros/s/AKfycbxlFmCWgMTkl41FYt2LEE9SjMagv6RuuX8V147qUXFu1O27UGlZU1-QMnbwGe1CG_Yh/exec
